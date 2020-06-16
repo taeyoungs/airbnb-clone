@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.utils.html import mark_safe
 from . import models
 
 
@@ -45,6 +46,7 @@ class RoomAdmin(admin.ModelAdmin):
         "check_out",
         "instant_book",
         "count_amenities",
+        "total_average",
     )
 
     list_filter = ("host__superhost", "amenity", "facility", "city", "country")
@@ -56,10 +58,17 @@ class RoomAdmin(admin.ModelAdmin):
     def count_amenities(self, obj):
         return obj.amenity.count()
 
+    count_amenities.short_description = "num of amentities"
+
 
 @admin.register(models.Photo)
 class PhotoAdmin(admin.ModelAdmin):
 
     """ Photo Admin Definition """
 
-    pass
+    list_display = ("__str__", "get_thumbnail")
+
+    def get_thumbnail(self, obj):
+        return mark_safe(f"<img width='50px' src='{obj.file.url}' />")
+
+    get_thumbnail.short_description = "thumbnail"

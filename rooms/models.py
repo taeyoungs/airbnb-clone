@@ -54,7 +54,7 @@ class Photo(models.Model):
     """ Photo Model Definition """
 
     caption = models.CharField(max_length=80)
-    file = models.ImageField()
+    file = models.ImageField(upload_to="rooms_photo")
     room = models.ForeignKey("Room", related_name="photos", on_delete=models.CASCADE)
 
     def __str__(self):
@@ -90,3 +90,13 @@ class Room(core_models.TimeStampedModel):
 
     def __str__(self):
         return self.name
+
+    def total_average(self):
+        reviews = self.reviews.all()
+        ratings = 0
+        for review in reviews:
+            ratings += review.review_average()
+        if ratings == 0:
+            return 0
+        else:
+            return ratings / len(reviews)
