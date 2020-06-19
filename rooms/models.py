@@ -100,3 +100,8 @@ class Room(core_models.TimeStampedModel):
             return 0
         else:
             return ratings / len(reviews)
+
+    def save(self, *args, **kwargs):
+        self.city = str.capitalize(self.city)
+        super(Room, self).save(*args, **kwargs)  # Call the real save() method
+
