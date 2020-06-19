@@ -54,6 +54,7 @@ class RoomAdmin(admin.ModelAdmin):
         "check_out",
         "instant_book",
         "count_amenities",
+        "count_photos",
         "total_average",
     )
 
@@ -66,7 +67,12 @@ class RoomAdmin(admin.ModelAdmin):
     def count_amenities(self, obj):
         return obj.amenity.count()
 
-    count_amenities.short_description = "num of amentities"
+    count_amenities.short_description = "amentities count"
+
+    def count_photos(self, obj):
+        return obj.photos.count()
+
+    count_photos.short_description = "photos count"
 
     raw_id_fields = ("host",)
 

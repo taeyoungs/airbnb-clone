@@ -8,6 +8,7 @@ class ReservationAdmin(admin.ModelAdmin):
     """ Reservation Admin Definition """
 
     list_display = (
+        "__str__",
         "status",
         "check_in",
         "check_out",
