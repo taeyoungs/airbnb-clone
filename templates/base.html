@@ -7,7 +7,14 @@
 </head>
 <body>
     
-{% include "partial/header.html" %}
+<header>
+    {% include "partial/header.html" %}
+    {% block search_block %}
+    <form action="/rooms/search" method="GET" >
+        <input placeholder="Search by City" name="city" />
+    </form>
+    {% endblock search_block %}
+</header>
 
 {% block content %}
 {% endblock content %}
