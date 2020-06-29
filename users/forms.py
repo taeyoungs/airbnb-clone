@@ -1,3 +1,4 @@
+from django.db import IntegrityError
 from django import forms
 from . import models
 
@@ -21,21 +22,23 @@ class LoginForm(forms.Form):
             self.add_error("email", forms.ValidationError("User does not exist"))
 
 
-class SignUpForm(forms.Form):
+class SignUpForm(forms.ModelForm):
+    # 이메일 중복 검사
+    def clean(self):
+        cleaned_data = super(SignUpForm, self).clean()
+        email = cleaned_data.get("email")
+        if models.User.objects.filter(username=email).exists():
+            self.add_error("email", forms.ValidationError("Email already exists"))
 
-    first_name = forms.CharField(max_length=80)
-    last_name = forms.CharField(max_length=80)
-    email = forms.EmailField()
+    class Meta:
+        model = models.User
+        fields = ["first_name", "last_name", "email"]
+        error_messages = {
+            IntegrityError: {"unique_together": "User's email are not unique.",}
+        }
+
     password = forms.CharField(widget=forms.PasswordInput)
     password1 = forms.CharField(widget=forms.PasswordInput, label="Confirm password")
-
-    def clean_email(self):
-        email = self.cleaned_data.get("email")
-        try:
-            models.User.objects.get(username=email)
-            raise forms.ValidationError("User already exists with that email")
-        except models.User.DoesNotExist:
-            return email
 
     def clean_password1(self):
         password = self.cleaned_data.get("password")
@@ -46,12 +49,11 @@ class SignUpForm(forms.Form):
         else:
             return password
 
-    def save(self):
-        first_name = self.cleaned_data.get("first_name")
-        last_name = self.cleaned_data.get("last_name")
+    def save(self, *args, **kwargs):
         email = self.cleaned_data.get("email")
         password = self.cleaned_data.get("password")
-        # create_user(username, email, password)
-        user = models.User.objects.create_user(email, email, password)
-        user.first_name = first_name
-        user.last_name = last_name
+        user = super().save(commit=False)
+        user.username = email
+        user.set_password(password)
+        user.save()
+
