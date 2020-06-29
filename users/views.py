@@ -3,7 +3,7 @@ from django.views import View
 from django.urls import reverse_lazy
 from django.shortcuts import render, redirect, reverse
 from django.contrib.auth import authenticate, login, logout
-from . import forms
+from . import forms, models
 
 
 class LoginView(FormView):
@@ -61,5 +61,20 @@ class SignUpView(FormView):
         user = authenticate(self.request, username=email, password=password)
         if user is not None:
             login(self.request, user)
+        user.verify_email()
 
         return super().form_valid(form)
+
+
+def complete_verification(request, secret):
+    try:
+        user = models.User.objects.get(email_secret=secret)
+        user.email_verified = True
+        user.email_secret = ""
+        user.save()
+        # to do success error messages
+        return redirect(reverse("core:home"))
+    except models.User.DoesNotExist:
+        # to do fail error messages
+        pass
+
