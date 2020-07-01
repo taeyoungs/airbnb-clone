@@ -48,6 +48,7 @@ class HomeView(ListView):
     paginate_by = 10
     paginate_orphans = 5
     context_object_name = "rooms"
+    ordering = "created"
 
 
 class RoomView(DetailView):
