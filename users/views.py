@@ -4,6 +4,7 @@ from django.views import View
 from django.urls import reverse_lazy
 from django.shortcuts import render, redirect, reverse
 from django.contrib.auth import authenticate, login, logout
+from django.core.files.base import ContentFile
 import requests
 from . import forms, models
 
@@ -81,16 +82,16 @@ def complete_verification(request, secret):
         pass
 
 
-class GithubException(Exception):
-    pass
-
-
 def github_login(request):
     client_id = os.environ.get("GH_ID")
     redirect_uri = "http://127.0.0.1:8001/users/login/github/callback/"
     return redirect(
         f"https://github.com/login/oauth/authorize?client_id={client_id}&redirect_uri={redirect_uri}&scope=read:user"
     )
+
+
+class GithubException(Exception):
+    pass
 
 
 def github_callback(request):
@@ -105,6 +106,9 @@ def github_callback(request):
                 headers={"Accept": "application/json",},
             )
             token_json = token_request.json()
+            error = token_json.get("error", None)
+            if error is not None:
+                raise GithubException()
             token = token_json.get("access_token")
             if token is not None:
                 profile_request = requests.get(
@@ -115,10 +119,12 @@ def github_callback(request):
                     },
                 )
                 profile_json = profile_request.json()
+                print(profile_json)
                 name = profile_json.get("name")
                 if name is not None:
                     email = profile_json.get("email")
                     bio = profile_json.get("bio")
+                    profile_image = profile_json.get("avatar_url")
                     if bio is None:
                         bio = ""
                     try:
@@ -133,9 +139,15 @@ def github_callback(request):
                             first_name=name,
                             bio=bio,
                             login_method=models.User.LOGIN_GITHUB,
+                            email_verified=True,
                         )
                         user.set_unusable_password()
                         user.save()
+                        photo_request = requests.get(profile_image)
+                        if photo_request is not None:
+                            user.avatar.save(
+                                f"{name}-avatar", ContentFile(photo_request.content)
+                            )
                     login(request, user)
                     return redirect(reverse("core:home"))
                 else:
@@ -147,3 +159,70 @@ def github_callback(request):
     except GithubException:
         return redirect(reverse("users:login"))
 
+
+def kakao_login(request):
+    client_id = os.environ.get("KAKAO_ID")
+    redirect_uri = "http://127.0.0.1:8001/users/login/kakao/callback"
+    return redirect(
+        f"https://kauth.kakao.com/oauth/authorize?client_id={client_id}&redirect_uri={redirect_uri}&response_type=code"
+    )
+
+
+class KakaoException(Exception):
+    pass
+
+
+def kakao_callback(request):
+    code = request.GET.get("code", None)
+    client_id = os.environ.get("KAKAO_ID")
+    redirect_uri = "http://127.0.0.1:8001/users/login/kakao/callback"
+    try:
+        if code is not None:
+            token_request = requests.post(
+                f"https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id={client_id}&redirect_uri={redirect_uri}&code={code}"
+            )
+            token_json = token_request.json()
+            error = token_json.get("error", None)
+            if error is not None:
+                raise KakaoException()
+            token = token_json.get("access_token", None)
+            if token is not None:
+                profile_request = requests.get(
+                    "https://kapi.kakao.com/v2/user/me",
+                    headers={"Authorization": f"Bearer {token}"},
+                )
+                profile_json = profile_request.json()
+                properties = profile_json.get("kakao_account").get("profile")
+                if properties is not None:
+                    email = profile_json.get("kakao_account").get("email")
+                    nickname = properties.get("nickname")
+                    profile_image = properties.get("profile_image_url")
+                    try:
+                        user = models.User.objects.get(email=email)
+                        if user.login_method != models.User.LOGIN_KAKAO:
+                            raise KakaoException()
+                    except models.User.DoesNotExist:
+                        user = models.User.objects.create(
+                            first_name=nickname,
+                            email=email,
+                            username=email,
+                            login_method=models.User.LOGIN_KAKAO,
+                            email_verified=True,
+                        )
+                        user.set_unusable_password()
+                        user.save()
+                        photo_request = requests.get(profile_image)
+                        if photo_request is not None:
+                            user.avatar.save(
+                                f"{nickname}-avatar", ContentFile(photo_request.content)
+                            )
+                    login(request, user)
+                    return redirect(reverse("core:home"))
+                else:
+                    raise KakaoException()
+            else:
+                raise KakaoException()
+        else:
+            raise KakaoException()
+    except KakaoException:
+        return redirect(reverse("users:login"))
