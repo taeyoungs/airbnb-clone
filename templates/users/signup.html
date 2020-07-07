@@ -16,9 +16,9 @@ Sign Up
 
     {% include "mixins/auth/auth_form.html" with form=form cta="Sign up" %}
 
-    <div class="w-full flex items-center justify-between p-6">
-        <span>Have an account?</span>
-        <a href="{% url 'users:login' %}" class="border border-teal-500 text-teal-500 py-2 px-4 rounded-lg">Log in</a>
+    <div class="w-full flex items-center justify-center px-6 pt-6">
+        <span class="text-gray-600 mr-5">Have an account?</span>
+        <a href="{% url 'users:login' %}" class="text-teal-500 font-semibold">Log in</a>
     </div>
 </div>
 
