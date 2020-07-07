@@ -1,5 +1,15 @@
 @tailwind base;
-
 @tailwind components;
+
+.search-box {
+  transition: box-shadow 0.2s linear;
+}
+
+.nav_link {
+  @apply ml-12 w-16 border-transparent border-b-2;
+  & a {
+    @apply h-full w-full flex items-center justify-center;
+  }
+}
 
 @tailwind utilities;

@@ -6,9 +6,16 @@ Home
 
 {% block content %}
 
-{% for room in rooms  %}
-<h3><a href="{% url "rooms:detail" room.pk %}">{{room.name}} | ${{room.price}}</a></h3>
-{% endfor %}
+<div class="container mx-auto w-3/4">
+
+    <div class="-mx-10 bg-gray-500 h-50vh mt-32 mb-20 rounded-lg bg-cover bg-bottom" style="background-image: url('https://images.unsplash.com/photo-1506816561089-5cc37b3aa9b0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&w=1141&q=80')"></div>
+
+    <div class="flex flex-wrap -mx-10">
+    {% for room in rooms  %}
+        {% include "partial/room_card.html" with room=room %}
+    {% endfor %}
+    </div>
+</div>
 
 <h4>
     {% if page_obj.has_previous %}

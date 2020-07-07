@@ -1,11 +1,12 @@
+{% load static %}
 
-<h3><a href="/">Home</a></h3>
-<ul>
-    {% if user.is_authenticated %}
-    <li><a href="{% url "users:logout" %}">Log Out</a></li>
-    {% else %}
-    <li><a href="{% url "users:login" %}">Log In</a></li>
-    <li><a href="{% url "users:signup" %}">Sign Up</a></li>
-    {% endif %}
-    
-</ul>
+<div>
+    <ul class="flex font-bold text-sm h-20">
+        {% if user.is_authenticated %}
+        <li class="nav_link hover:border-red-500"><a href="{% url "users:logout" %}">Log Out</a></li>
+        {% else %}
+        <li class="nav_link hover:border-red-500"><a href="{% url "users:login" %}">Log In</a></li>
+        <li class="nav_link hover:border-red-500"><a href="{% url "users:signup" %}">Sign Up</a></li>
+        {% endif %}
+    </ul>
+</div>
