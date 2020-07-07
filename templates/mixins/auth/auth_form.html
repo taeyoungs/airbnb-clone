@@ -1,0 +1,7 @@
+  <form method="POST" class="flex flex-col">
+      {% csrf_token %}
+      {% for field in form %}
+          {% include "mixins/auth/form_input.html" with field=field %}
+      {% endfor %}
+      <button  class="btn bg-red-500 text-white text-lg mt-4">{{cta}}</button>
+  </form>

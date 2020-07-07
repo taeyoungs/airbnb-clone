@@ -9,11 +9,17 @@ Sign Up
 {% endblock search_block %}
 
 {% block content %}
-{% include "partial/social_login.html" %}
 
-<form action="{% url "users:signup" %}" method="POST">
-    {% csrf_token %}
-    {{form.as_p}}
-    <button>SignUp</button>
-</form>
+<div class="form_style container">
+    {% include "partial/social_login.html" %}
+    {% include "partial/divider.html" %}
+
+    {% include "mixins/auth/auth_form.html" with form=form cta="Sign up" %}
+
+    <div class="w-full flex items-center justify-between p-6">
+        <span>Have an account?</span>
+        <a href="{% url 'users:login' %}" class="border border-teal-500 text-teal-500 py-2 px-4 rounded-lg">Log in</a>
+    </div>
+</div>
+
 {% endblock content %}

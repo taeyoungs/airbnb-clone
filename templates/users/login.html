@@ -8,11 +8,17 @@ Login
 {% endblock search_block %}
 
 {% block content %}
-{% include "partial/social_login.html" %}
 
-<form action="{% url "users:login" %}" method="POST">
-    {% csrf_token %}
-    {{form.as_p}}
-    <button>Login</button>
-</form>
+<div class="form_style container">
+    {% include "partial/social_login.html" %}
+    {% include "partial/divider.html" %}
+
+    {% include "mixins/auth/auth_form.html" with form=form cta="Log in" %}
+
+    <div class="w-full flex items-center justify-between p-6">
+        <span>Don't have an account?</span>
+        <a href="{% url 'users:signup' %}" class="border border-teal-500 text-teal-500 py-2 px-4 rounded-lg">Sign up</a>
+    </div>
+</div>
+
 {% endblock content %}

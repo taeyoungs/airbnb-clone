@@ -12,4 +12,28 @@
   }
 }
 
+.btn {
+  @apply py-6 text-sm flex items-center justify-center rounded-sm mb-2;
+}
+
+input {
+  @apply border border-gray-500 px-4 py-6 text-sm flex items-center justify-center rounded-sm w-full outline-none;
+  &:focus {
+    @apply border-teal-500;
+  }
+}
+
+form {
+  & .input {
+    @apply mb-3;
+  }
+  & .has_error input {
+    @apply bg-red-200;
+  }
+}
+
+.form_style {
+  @apply mx-auto w-1/3 border border-gray-500 px-10 py-8;
+}
+
 @tailwind utilities;
