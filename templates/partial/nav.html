@@ -3,6 +3,7 @@
 <div>
     <ul class="flex font-bold text-sm h-20">
         {% if user.is_authenticated %}
+        <li class="nav_link hover:border-red-500"><a href="{{user.get_absolute_url}}">Profile</a></li>
         <li class="nav_link hover:border-red-500"><a href="{% url "users:logout" %}">Log Out</a></li>
         {% else %}
         <li class="nav_link hover:border-red-500"><a href="{% url "users:login" %}">Log In</a></li>

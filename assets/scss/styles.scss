@@ -16,11 +16,26 @@
   @apply py-6 text-sm flex items-center justify-center rounded-sm mb-2;
 }
 
-input {
+.btn--small {
+  @apply py-4 text-base flex items-center justify-center rounded-md mb-2;
+}
+
+input,
+textarea,
+select {
   @apply border border-gray-500 px-4 py-6 text-sm flex items-center justify-center rounded-sm w-full outline-none;
   &:focus {
     @apply border-teal-500;
   }
+}
+
+textarea {
+  height: 100px;
+  resize: none;
+}
+
+select {
+  height: 30px;
 }
 
 form {
@@ -33,7 +48,7 @@ form {
 }
 
 .form_style {
-  @apply mx-auto w-1/3 border border-gray-500 px-10 py-8;
+  @apply mx-auto border border-gray-500 px-10 py-8;
 }
 
 @keyframes messageFadeIn {

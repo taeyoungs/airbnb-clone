@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title_name %}
-Login
+Update Profile
 {% endblock title_name %}
 
 {% block search_block %}
@@ -10,15 +10,15 @@ Login
 {% block content %}
 
 <div class="form_style container xl:w-1/3 sm:w-7/12 md:w-1/2 lg:w-2/5">
-    {% include "partial/social_login.html" %}
-    {% include "partial/divider.html" %}
 
-    {% include "mixins/auth/auth_form.html" with form=form cta="Log in" %}
+    {% include "mixins/auth/auth_form.html" with form=form cta="Update profile" %}
 
+    {% if user.login_method == "email" %}
     <div class="w-full flex items-center justify-center px-6 pt-6">
-        <span class="text-gray-600 mr-3">Don't have an account?</span>
-        <a href="{% url 'users:signup' %}" class="text-teal-500 font-semibold">Sign up</a>
+        <a href="{% url 'users:update-password' %}" class="text-teal-500 font-semibold">Change password</a>
     </div>
+    {% endif %}
+
 </div>
 
 {% endblock content %}
