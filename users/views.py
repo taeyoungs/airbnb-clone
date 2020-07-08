@@ -7,15 +7,15 @@ from django.shortcuts import render, redirect, reverse
 from django.contrib.auth import authenticate, login, logout
 from django.core.files.base import ContentFile
 from django.contrib import messages
+from django.contrib.messages.views import SuccessMessageMixin
 import requests
-from . import forms, models
+from . import forms, models, mixins
 
 
-class LoginView(FormView):
+class LoginView(mixins.LoggedOutOnlyView, FormView):
 
     template_name = "users/login.html"
     form_class = forms.LoginForm
-    success_url = reverse_lazy("core:home")
 
     def form_valid(self, form):
         email = form.cleaned_data.get("email")
@@ -43,6 +43,13 @@ class LoginView(FormView):
         return render(request, "users/login.html", {"form": form})
     """
 
+    def get_success_url(self):
+        next_location = self.request.GET.get("next")
+        if next_location is not None:
+            return next_location
+        else:
+            return reverse("core:home")
+
 
 def log_out(request):
     logout(request)
@@ -50,7 +57,7 @@ def log_out(request):
     return redirect(reverse("core:home"))
 
 
-class SignUpView(FormView):
+class SignUpView(mixins.LoggedOutOnlyView, FormView):
 
     template_name = "users/signup.html"
     form_class = forms.SignUpForm
@@ -242,7 +249,9 @@ class UserProfileView(DetailView):
     context_object_name = "user_obj"
 
 
-class UpdateProfileView(UpdateView):
+class UpdateProfileView(
+    mixins.EmailOnlyView, mixins.LoggedInOnlyView, SuccessMessageMixin, UpdateView
+):
 
     model = models.User
     fields = [
@@ -255,6 +264,7 @@ class UpdateProfileView(UpdateView):
         "currency",
     ]
     template_name = "users/update_profile.html"
+    success_message = "Profile Updated"
 
     def get_object(self, queryset=None):
         # 로그인한 유저 정보
@@ -272,9 +282,15 @@ class UpdateProfileView(UpdateView):
         return form
 
 
-class UpdatePasswordView(PasswordChangeView):
+class UpdatePasswordView(
+    mixins.EmailOnlyView,
+    mixins.LoggedInOnlyView,
+    SuccessMessageMixin,
+    PasswordChangeView,
+):
 
     template_name = "users/update_password.html"
+    success_message = "Password Updated"
 
     def get_form(self, form_class=None):
 
