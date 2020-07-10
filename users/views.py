@@ -250,7 +250,7 @@ class UserProfileView(DetailView):
 
 
 class UpdateProfileView(
-    mixins.EmailOnlyView, mixins.LoggedInOnlyView, SuccessMessageMixin, UpdateView
+    mixins.LoggedInOnlyView, mixins.EmailOnlyView, SuccessMessageMixin, UpdateView
 ):
 
     model = models.User
@@ -283,8 +283,8 @@ class UpdateProfileView(
 
 
 class UpdatePasswordView(
-    mixins.EmailOnlyView,
     mixins.LoggedInOnlyView,
+    mixins.EmailOnlyView,
     SuccessMessageMixin,
     PasswordChangeView,
 ):

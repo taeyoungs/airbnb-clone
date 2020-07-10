@@ -9,17 +9,12 @@
 
 {% block content %}
 
-<div class="h-75vh">
+<div>
     <div class="form_style container xl:w-1/3 sm:w-7/12 md:w-1/2 lg:w-2/5">
 
         <div class="flex flex-col items-center">
-            {% if user_obj.avatar %}
-                <div class="h-20 w-20 bg-cover bg-center rounded-full" style="background-image: url({{user_obj.avatar.url}});">
-            {% else %}
-                <div class="h-20 w-20 bg-gray-700 rounded-full text-white text-3xl flex items-center justify-center">
-                {{user_obj.first_name|first}}
-            {% endif %}
-            </div>
+            
+            {% include "mixins/user_avatar.html" with user=user_obj %}
             <span class="my-2 text-xl font-semibold">{{user_obj.first_name}}</span>
             <span class="my-2">{{user_obj.bio}}</span>
         </div>
@@ -30,6 +25,14 @@
         </div>
         {% endif %}
         
+    </div>
+
+    <div class="text-center text-xl font-semibold my-10">{{user_obj.first_name}}'s Rooms</div>
+
+    <div class="flex flex-wrap my-10 mx-32">
+    {% for room in user_obj.rooms.all %}
+        {% include "mixins/room_card.html" with room=room %}
+    {% endfor %}
     </div>
 </div>
 

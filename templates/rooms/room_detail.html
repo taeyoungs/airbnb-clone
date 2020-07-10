@@ -1,41 +1,110 @@
 {% extends "base.html" %}
 
 {% block title_name %}
-Home
+{{room.name}}
 {% endblock title_name %}
 
 {% block content %}
 
-<div>
-    <h1>{{room.name}}</h1>
-    <h3>{{room.description}}</h3>
-</div>
-<div>
-    {% if room.host.superhost %}
-    <h4>superhost</h4>
-    {% endif %}
-    <a href="{{room.host.get_absolute_url}}">{{room.host}}</a>
-</div>
-<div>
-    <h3>Amenities</h3>
-    <ul>
-        {% for a in room.amenity.all %}
-        <li>{{a}}</li>
+<div class="flex mb-16 -mt-16">
+    <div class="w-1/2 h-75vh border border-gray-700 bg-center bg-cover" style="background-image: url({{room.first_photo}})"></div>
+    <div class="w-1/2 h-75vh flex flex-wrap">
+        {% for photo in room.get_four_photos %}
+            <div class="border border-gray-700 bg-center bg-cover w-1/2 h-1/2" style="background-image: url({{photo.file.url}})"></div>
         {% endfor %}
-    </ul>
-    <h3>Factilities</h3>
-    <ul>
-        {% for f in room.facility.all %}
-        <li>{{f}}</li>
-        {% endfor %}
-    </ul>
-    <h3>House Rules</h3>
-    <ul>
-        {% for r in room.house_rule.all %}
-        <li>{{r}}</li>
-        {% endfor %}
-    </ul>
+    </div>
 </div>
 
+<div class="container mx-auto flex justify-around">
+    <div class="w-1/2">
+        <div class="flex items-center border-section">
+            <div class="w-3/4">
+                <div class="font-semibold text-2xl mb-1">{{room.name}}</div>
+                <div class="text-gray-600 text-sm mb-1">{{room.city}}</div>
+                <div>
+                    <span class="mr-2">{{room.room_type}}</span>
+                    <span class="mr-2">{{room.beds}} bed{{room.beds|pluralize}}</span>
+                    <span class="mr-2">{{room.bedrooms}} bedroom{{room.bedrooms|pluralize}}</span>
+                    <span class="mr-2">{{room.bath}} bath{{room.bath|pluralize}}</span>
+                    <span>{{room.guests}} guest{{room.guests|pluralize}}</span>
+                </div>
+            </div>
+            <div class="w-1/4 flex flex-col items-center justify-center">
+                <a href="{{room.host.get_absolute_url}}">{% include "mixins/user_avatar.html" with user=room.host %}</a>
+                <div class="text-center mt-3">{{room.host.first_name}}</div>
+            </div>
+        </div>
+        <div class="border-section">
+            <p>
+            {{room.description}}
+            </p>
+        </div>
+        <div class="border-section">
+            <div class="mb-5 text-xl font-semibold">Amenities</div>
+            <div>
+            {% if room.amenity.count == 0 %}
+                <div class="text-center text-gray-600">No amenities</div>
+            {% endif %}
+            {% for a in room.amenity.all %}
+                <li>{{a}}</li>
+            {% endfor %}
+            </div>
+        </div>
+        <div class="border-section">
+            <div class="mb-5 text-xl font-semibold">Facilities</div>
+            <div>
+            {% if room.facility.count == 0 %}
+                <div class="text-center text-gray-600">No facilities</div>
+            {% endif %}
+            {% for f in room.facility.all %}
+                <li>{{f}}</li>
+            {% endfor %}
+            </div>
+        </div>
+        <div class="border-section">
+            <div class="mb-5 text-xl font-semibold">House Rules</div>
+            <div>
+            {% if room.house_rule.count == 0 %}
+                <div class="text-center text-gray-600">No house rules</div>
+            {% endif %}
+            {% for h in room.house_rule.all %}
+                <li>{{h}}</li>
+            {% endfor %}
+            </div>
+        </div>
+        <div>
+            <div class="mb-8 text-2xl font-semibold">Reviews</div>
+            {% if room.reviews.count == 0 %}
+                <div class="text-center text-gray-600">No reviews</div>
+            {% else %}
+                <div class="mb-8 flex items-center">
+                    <div>
+                        <i class="fas fa-star text-teal-600"></i>
+                        <span class="text-lg font-semibold">{{room.total_average}}</span>
+                    </div>
+                    <div class="h-4 w-px bg-gray-400 mx-5"></div>
+                    <div>
+                        <span class="text-lg font-semibold">{{room.reviews.count}}</span>
+                        <span>reviews</span>
+                    </div>
+                </div>
+            {% endif %}
+           
+            {% for review in room.reviews.all %}
+                <div class="border-section">
+                    <div class="flex items-center mb-3">
+                        <a href="{{review.user.get_absolute_url}}">{% include "mixins/user_avatar.html" with user=review.user h_w='h-10 w-10' text='text-xl' %}</a>
+                        <div class="ml-4">
+                            <div class="font-semibold">{{review.user.first_name}}</div>
+                            <div class="text-sm text-gray-500">{{review.created|date:'F Y'}}</div>
+                        </div>
+                    </div>
+                    <div>{{review.content}}</div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div>1</div>
+</div>
 
 {% endblock content %}
