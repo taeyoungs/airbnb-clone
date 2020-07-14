@@ -1,4 +1,4 @@
-<form method="POST" class="flex flex-col">
+<form method="POST" class="flex flex-col" enctype="multipart/form-data">
     {% csrf_token %}
 
     {% if form.non_field.errors %}

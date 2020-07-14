@@ -9,6 +9,9 @@ Edit Photos
 
 {% block content %}
 
+<div class="w-1/2 mb-5 mx-auto">
+    <a href="{% url 'rooms:upload-photo' room.pk %}" class="btn--small bg-red-500 text-white w-1/4">Upload Photo</a>
+</div>
 {% for photo in room.photos.all %}
     <div class="form_style container flex mb-5 w-2/3 justify-between">
         <div class="flex items-center">
@@ -16,7 +19,7 @@ Edit Photos
             <div>{{photo.caption}}</div>
         </div>
         <div class="w-1/5">
-            <a href="{% url 'rooms:edit' room.pk %}" class="btn--small bg-teal-500 text-white">Edit Photo</a>
+            <a href="{% url 'rooms:update-photo' room.pk photo.pk %}" class="btn--small bg-teal-500 text-white">Update Photo</a>
             <a href="{% url 'rooms:delete-photo' room.pk photo.pk %}" class="btn--small bg-red-600 text-white">Delete Photo</a>
         </div>
     </div>
