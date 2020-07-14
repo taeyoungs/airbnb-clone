@@ -1,9 +1,13 @@
-from django.views.generic import ListView, DetailView, View
+from django.http import Http404
+from django.views.generic import ListView, DetailView, View, UpdateView
+from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse
 from django.http import Http404
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, reverse
+from django.contrib import messages
 from django_countries import countries
 from . import models, forms
+from users import mixins as user_mixins
 
 """
 def all_rooms(request):
@@ -124,3 +128,72 @@ class SearchView(View):
             form = forms.SearchForm()
 
         return render(request, "rooms/search.html", {"form": form})
+
+
+class EditRoomView(user_mixins.LoggedInOnlyView, SuccessMessageMixin, UpdateView):
+
+    model = models.Room
+    fields = (
+        "name",
+        "description",
+        "country",
+        "city",
+        "price",
+        "address",
+        "guests",
+        "beds",
+        "bedrooms",
+        "bath",
+        "check_in",
+        "check_out",
+        "instant_book",
+        "room_type",
+        "amenity",
+        "facility",
+        "house_rule",
+    )
+    template_name = "rooms/room_edit.html"
+    success_message = "Room Updated"
+
+    def get_object(self, queryset=None):
+
+        room = super().get_object(queryset=queryset)
+
+        if room.host.pk != self.request.user.pk:
+            raise Http404()
+        else:
+            return room
+
+
+class EditPhotoView(user_mixins.LoggedInOnlyView, SuccessMessageMixin, DetailView):
+
+    model = models.Room
+    success_message = "Photos Updated"
+    template_name = "rooms/room_photos.html"
+
+    def get_object(self, queryset=None):
+
+        room = super().get_object(queryset=queryset)
+
+        if room.host.pk != self.request.user.pk:
+            raise Http404()
+        else:
+            return room
+
+
+def delete_photo(request, room_pk, photo_pk):
+
+    user = request.user
+
+    try:
+        room = models.Room.objects.get(pk=room_pk)
+        if room.host.pk != user.pk:
+            messages.error(request, "Permission denied")
+        else:
+            room.photos.filter(pk=photo_pk).delete()
+            messages.success(request, "Deleted Photo")
+    except models.Room.DoesNotExist:
+        return redirect(reverse("core:home"))
+
+    return redirect(reverse("rooms:photos", kwargs={"pk": room_pk}))
+

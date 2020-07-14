@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title_name %}
+Edit Photos
+{% endblock title_name %}
+
+{% block search_block %}
+{% endblock search_block %}
+
+{% block content %}
+
+{% for photo in room.photos.all %}
+    <div class="form_style container flex mb-5 w-2/3 justify-between">
+        <div class="flex items-center">
+            <div class="w-32 h-32 bg-center bg-cover mr-5" style="background-image: url({{photo.file.url}})"></div>
+            <div>{{photo.caption}}</div>
+        </div>
+        <div class="w-1/5">
+            <a href="{% url 'rooms:edit' room.pk %}" class="btn--small bg-teal-500 text-white">Edit Photo</a>
+            <a href="{% url 'rooms:delete-photo' room.pk photo.pk %}" class="btn--small bg-red-600 text-white">Delete Photo</a>
+        </div>
+    </div>
+{% endfor %}
+
+{% endblock content %}

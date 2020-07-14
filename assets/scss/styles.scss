@@ -23,7 +23,7 @@
 input,
 textarea,
 select {
-  @apply border border-gray-500 px-4 py-6 text-sm flex items-center justify-center rounded-sm w-full outline-none;
+  @apply border border-gray-500 px-4 py-6 text-sm flex items-center rounded-sm w-full outline-none;
   &:focus {
     @apply border-teal-500;
   }
@@ -32,10 +32,6 @@ select {
 textarea {
   height: 100px;
   resize: none;
-}
-
-select {
-  height: 30px;
 }
 
 form {
