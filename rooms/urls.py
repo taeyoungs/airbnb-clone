@@ -4,10 +4,12 @@ from . import views
 app_name = "rooms"
 
 urlpatterns = [
+    path("add/", views.CreateRoomView.as_view(), name="add"),
     path("<int:pk>/", views.RoomView.as_view(), name="detail"),
     path("<int:pk>/edit/", views.EditRoomView.as_view(), name="edit"),
+    path("<int:pk>/delete/", views.delete_room, name="delete-room"),
     path("<int:pk>/photos/", views.EditPhotoView.as_view(), name="photos"),
-    path("<int:pk>/photos/add", views.UploadPhotoView.as_view(), name="upload-photo"),
+    path("<int:pk>/photos/add/", views.UploadPhotoView.as_view(), name="upload-photo"),
     path(
         "<int:room_pk>/photos/<int:photo_pk>/delete/",
         views.delete_photo,

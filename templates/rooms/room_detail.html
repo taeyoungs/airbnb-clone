@@ -106,7 +106,8 @@
     </div>
     <div class="w-1/5">
         {% if room.host == user %}
-            <a href="{% url 'rooms:edit' room.pk %}" class="btn--small bg-red-500 text-white">Edit Room</a>
+            <a href="{% url 'rooms:edit' room.pk %}" class="btn--small bg-teal-500 text-white">Edit Room</a>
+            <a href="{% url 'rooms:delete-room' room.pk %}" class="btn--small bg-red-600 text-white">Delete Room</a>
         {% else %}
         {% endif %}
     </div>

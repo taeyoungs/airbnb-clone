@@ -43,3 +43,31 @@ class CreatePhotoForm(forms.ModelForm):
         photo.room = room
         photo.save()
 
+
+class CreateRoomForm(forms.ModelForm):
+    class Meta:
+        model = models.Room
+        fields = (
+            "name",
+            "description",
+            "country",
+            "city",
+            "price",
+            "address",
+            "guests",
+            "beds",
+            "bedrooms",
+            "bath",
+            "check_in",
+            "check_out",
+            "instant_book",
+            "room_type",
+            "amenity",
+            "facility",
+            "house_rule",
+        )
+
+    def save(self, *args, **kwargs):
+        room = super().save(commit=False)
+
+        return room

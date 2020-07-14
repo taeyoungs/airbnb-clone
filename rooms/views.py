@@ -222,6 +222,40 @@ class UploadPhotoView(user_mixins.LoggedInOnlyView, FormView):
     def form_valid(self, form):
         pk = self.kwargs.get("pk")
         form.save(pk)
-        messages.success("Photo Uploaded")
+        messages.success(request, "Photo Uploaded")
 
         return redirect(reverse("rooms:photos", kwargs={"pk": pk}))
+
+
+class CreateRoomView(user_mixins.LoggedInOnlyView, SuccessMessageMixin, FormView):
+
+    form_class = forms.CreateRoomForm
+    template_name = "rooms/room_create.html"
+    success_message = "Room Created"
+
+    def form_valid(self, form):
+        user = self.request.user
+        room = form.save()
+        room.host = user
+        room.save()
+        form.save_m2m()
+
+        return redirect(reverse("rooms:detail", kwargs={"pk": room.pk}))
+
+
+@login_required
+def delete_room(request, pk):
+
+    try:
+        room = models.Room.objects.get(pk=pk)
+        if room.host.pk != request.user.pk:
+            messages.error(request, "Permission denied")
+        else:
+            models.Room.objects.get(pk=pk).delete()
+    except models.Room.DoesNotExist:
+        messages.error(request, "Room does not exist")
+        return redirect(reverse("core:home"))
+
+    messages.success(request, "Room deleted")
+    return redirect(reverse("core:home"))
+

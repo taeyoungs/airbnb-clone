@@ -24,5 +24,8 @@ Edit Photos
         </div>
     </div>
 {% endfor %}
+<div class="w-full flex justify-center my-8">
+    <a href="{% url 'rooms:edit' room.pk %}" class="text-teal-500 font-medium text-lg">Back to edit room</a>
+</div>
 
 {% endblock content %}
