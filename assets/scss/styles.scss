@@ -6,7 +6,7 @@
 }
 
 .nav_link {
-  @apply ml-8 w-32 border-transparent border-b-2;
+  @apply w-32 border-transparent border-b-2;
   & a {
     @apply h-full w-full flex items-center justify-center;
   }
@@ -84,6 +84,12 @@ form {
 
 .border-section {
   @apply border-b border-gray-600 pb-8 mt-8;
+}
+
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-gap: 5px;
 }
 
 @tailwind utilities;
