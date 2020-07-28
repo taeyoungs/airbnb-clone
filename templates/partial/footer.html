@@ -1,3 +1,21 @@
+{% load i18n %}
+
 <footer class="mt-32 py-20 container mx-auto text-center text-gray-600 border-t border-gray-500">
-    <span>&copy; 2020 Youngs-log. All rights reserved.</span>
+    <div class="flex flex-col">
+        <span class="text-sm">{% trans "2020-07-28 업데이트" %}</span>
+        <span class="mb-3">&copy; 2020 Youngs-log. All rights reserved.</span>
+        {% get_current_language as LANGUAGE_CODE %}
+        <select class="w-1/12 mx-auto py-1 text-xs" id="js-lang"">
+            <option value="en" 
+                {% if LANGUAGE_CODE == 'en' %}
+                selected
+                {% endif %}
+            >{% trans "영어로 변경" %}</option>
+            <option value="ko"
+                {% if LANGUAGE_CODE == 'ko' %}
+                selected
+                {% endif %}
+            >{% trans "한국어로 변경" %}</option>
+        </select>
+    </div>
 </footer>

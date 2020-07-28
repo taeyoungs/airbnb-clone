@@ -22,4 +22,5 @@ urlpatterns = [
         "update-password/", views.UpdatePasswordView.as_view(), name="update-password"
     ),
     path("is-hosting/", views.switch_hosting, name="is-hosting"),
+    path("switch-lang/", views.switch_lang, name="switch-lang"),
 ]

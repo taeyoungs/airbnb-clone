@@ -1,4 +1,4 @@
-{% load static %}
+{% load static i18n %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,7 +16,10 @@
         <a href="/" class="mr-5"><img class="w-10" src="{% static 'img/logo.png' %}" /></a>
         {% block search_block %}
         <form action="/rooms/search" method="GET" class="w-2/3" >
-            <input class="search-box border rounded-sm px-5 py-3 w-full shadow-md hover:shadow-lg placeholder-gray-600 font-semibold outline-none" placeholder="Search by City" name="city" />
+            <input 
+                class="search-box border rounded-sm px-5 py-3 w-full shadow-md hover:shadow-lg placeholder-gray-600 font-semibold outline-none" 
+                placeholder="{% trans '도시로 검색' %}" 
+                name="city" />
         </form>
         {% endblock search_block %}
     </div>
@@ -27,6 +30,18 @@
 {% endblock content %}
 
 {% include "partial/footer.html" %}
+<script>
+    const lang = document.getElementById("js-lang");
+    const handleLangChange = () => {
+        selectedLang = lang.value
+        fetch(`{% url 'users:switch-lang' %}?lang=${selectedLang}`).then(() => {
+            {% get_current_language as LANGUAGE_CODE %}
+            const t = `{{LANGUAGE_CODE}}`
+            alert(t)
+        }).then(() => window.location.reload())
+    };
+    lang.addEventListener("change", handleLangChange);
 
+</script>
 </body>
 </html>

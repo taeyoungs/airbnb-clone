@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title_name %}
+{{user.first_name}}'s Favs
+{% endblock title_name %}
+
+{% block search_block %}
+{% endblock search_block %}
+
+{% block content %}
+
+<div>
+    <div class="text-center text-xl font-semibold my-10">Your favorites</div>
+
+    {% if user.list.room.count == 0 %}
+        <div class="text-center">No favorites</div>
+    {% else %}
+        <div class="flex flex-wrap my-10 mx-32">
+        {% for room in user.list.room.all %}
+            {% include "mixins/room_card.html" with room=room %}
+        {% endfor %}
+        </div>
+    {% endif %}
+    
+</div>
+
+{% endblock content %}

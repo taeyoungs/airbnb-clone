@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load is_booked %}
+{% load is_booked i18n on_favs %}
 
 {% block title_name %}
 {{room.name}}
@@ -28,6 +28,14 @@
                     <span class="mr-2">{{room.bedrooms}} bedroom{{room.bedrooms|pluralize}}</span>
                     <span class="mr-2">{{room.bath}} bath{{room.bath|pluralize}}</span>
                     <span>{{room.guests}} guest{{room.guests|pluralize}}</span>
+                </div>
+                {% on_favs room as on_favs_boolean %}
+                <div class="my-1 font-semibold text-teal-500 text-sm">
+                    {% if on_favs_boolean %}
+                        <a href="{% url 'lists:toggle' room.pk 'remove' %}">Remove from Favorites</a>
+                    {% else %}
+                        <a href="{% url 'lists:toggle' room.pk 'add' %}">Add to Favorites</a>
+                    {% endif %}
                 </div>
             </div>
             <div class="w-1/4 flex flex-col items-center justify-center">
