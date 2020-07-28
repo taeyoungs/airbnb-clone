@@ -13,6 +13,11 @@ class Reservation(core_models.TimeStampedModel):
 
     """ Reservation Model Definition """
 
+    class Meta:
+        ordering = [
+            "-created",
+        ]
+
     STATUS_PENDING = "pending"
     STATUS_CONFIRMED = "confirmed"
     STATUS_CANCELED = "canceled"
@@ -46,21 +51,27 @@ class Reservation(core_models.TimeStampedModel):
 
     def is_finished(self):
         now = timezone.now().date()
-        return now > self.check_out
+        is_finished = now > self.check_out
+        if is_finished:
+            BookedDay.objects.filter(reserve=self).delete()
+
+        return is_finished
 
     is_finished.boolean = True
 
     def save(self, *args, **kwargs):
-        start = self.check_in
-        end = self.check_out
-        diff = end - start
-        existing_booked_days = BookedDay.objects.filter(
-            day__range=(start, end)
-        ).exists()
-        if not existing_booked_days:
-            super(Reservation, self).save(*args, **kwargs)
-            for d in range(0, diff.days + 1):
-                day = self.check_in + timedelta(days=d)
-                BookedDay.objects.create(day=day, reserve=self)
-            return
-        return super(Reservation, self).save(*args, **kwargs)
+        if self.pk is None:
+            start = self.check_in
+            end = self.check_out
+            diff = end - start
+            existing_booked_days = BookedDay.objects.filter(
+                day__range=(start, end)
+            ).exists()
+            if not existing_booked_days:
+                super(Reservation, self).save(*args, **kwargs)
+                for d in range(0, diff.days + 1):
+                    day = self.check_in + timedelta(days=d)
+                    BookedDay.objects.create(day=day, reserve=self)
+                return
+        else:
+            return super(Reservation, self).save(*args, **kwargs)

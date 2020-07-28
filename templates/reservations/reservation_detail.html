@@ -9,11 +9,44 @@ Reservation Detail
 
 {% block content %}
 
-<div>
-    <div class="form_style container">
-
-     
+<div class="form_style container flex flex-col mb-5 w-2/3 p-0">
+    <div class="bg-cover bg-center h-56" style="background-image: url({{reservation.room_info.first_photo}})"></div>
+    <div class="font-semibold text-sm border-b py-8 px-5 w-full border-gray-600">{{reservation.check_in}} - {{reservation.check_out}} 
+        <span class="ml-5 {% if reservation.status == 'pending' %}text-yellow-600{% endif %}{% if reservation.status == 'canceled' %}text-red-600{% endif %}{% if reservation.status == 'confirmed' %}text-teal-600{% endif %}">{{reservation.get_status_display}}</span>
     </div>
+    <div class="py-8 px-5 font-medium text-lg border-b border-gray-600">{{reservation.room_info.name}}</div>
+    <div class="flex items-center py-8 border-b border-gray-600">
+        <div class="flex flex-col mx-5">
+            <a href="{{room.host.get_absolute_url}}">{% include "mixins/user_avatar.html" with user=reservation.room_info.host %}</a>
+            <div class="text-center mt-3">{{reservation.room_info.host.first_name}}</div>
+        </div>
+        <div class="flex flex-col">
+            <div class="font-semibold">Contact your Airbnb Host</div>
+            <a href="#" class="font-semibold text-teal-500">Send a Message</a>
+        </div>
+    </div>
+    {% if reservation.status == 'pending' %}
+    <div class="py-6 px-5">
+        <a href="{% url 'reservations:edit' reservation.pk 'cancel' %}" class="btn--small bg-red-500 text-white w-1/5">Cancel Reservation</a>
+        {% if reservation.room_info.host == user %}
+            <a href="{% url 'reservations:edit' reservation.pk 'confirm' %}" class="mt-3 btn--small bg-teal-500 text-white w-1/5">Confirm Reservation</a>
+        {% endif %}
+    </div>
+    {% endif %}
+    {% if reservation.status == 'confirmed' and reservation.is_finished %}
+        {% if reservation.guest == user %}
+            <div class="w-1/2 mx-auto">
+                <span class="my-5 font-semibold text-xl text-center block">Write your review</span>
+                <form action="{% url 'reviews:create' reservation.room_info.pk %}" method="POST" class="mb-5">
+                    {% csrf_token %}
+                    {{form}}
+                    <div class="flex justify-center">
+                        <button class="btn--small bg-teal-500 my-2 text-white w-1/4 text-sm">Submit Review</button>
+                    </div>
+                </form>
+            </div>
+        {% endif %}
+    {% endif %}
 </div>
 
 {% endblock content %}

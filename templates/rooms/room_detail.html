@@ -86,7 +86,7 @@
                     <div class="h-4 w-px bg-gray-400 mx-5"></div>
                     <div>
                         <span class="text-lg font-semibold">{{room.reviews.count}}</span>
-                        <span>reviews</span>
+                        <span>review{{room.reviews.count|pluralize}}</span>
                     </div>
                 </div>
             {% endif %}
@@ -124,7 +124,7 @@
                                     {% if is_booked_bool %}
                                         <span class="flex items-center justify-center bg-teal-200 text-gray-500 rounded p-1 text-sm cursor-default">{{d.day}}</span>
                                     {% else %}
-                                        <span class="flex items-center justify-center bg-gray-200 rounded p-1 text-sm hover:bg-teal-500 hover:text-white cursor-pointer hover:font-medium">{{d.day}}</span>
+                                        <a href="{% url 'reservations:create' room.pk d.year d.month d.day %}" class="flex items-center justify-center bg-gray-200 rounded p-1 text-sm hover:bg-teal-500 hover:text-white cursor-pointer hover:font-medium">{{d.day}}</a>
                                     {% endif %}
                                 {% else %}
                                 <span class="flex items-center justify-center bg-red-200 text-gray-500 rounded p-1 text-sm cursor-default">{{d.day}}</span>
