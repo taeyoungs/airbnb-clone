@@ -3,6 +3,11 @@ from . import views
 
 app_name = "users"
 
+
+def trigger_error(request):
+    division_by_zero = 1 / 0
+
+
 urlpatterns = [
     path("login/", views.LoginView.as_view(), name="login"),
     path("login/github/", views.github_login, name="github-login"),
@@ -24,4 +29,5 @@ urlpatterns = [
     path("is-hosting/", views.switch_hosting, name="is-hosting"),
     path("switch-lang/", views.switch_lang, name="switch-lang"),
     path("reservations/", views.UserReservationListView.as_view(), name="reservations"),
+    path("sentry-debug/", trigger_error),
 ]
