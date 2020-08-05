@@ -59,6 +59,7 @@ class User(AbstractUser):
     login_method = models.CharField(
         max_length=6, choices=LOGIN_CHOICES, default=LOGIN_EMAIL
     )
+    objects = core_managers.CustomUserManager()
 
     def verify_email(self):
         secret = uuid.uuid4().hex[:20]

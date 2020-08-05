@@ -8,11 +8,8 @@ from users import models as user_models
 
 def go_conversation(request, h_pk, g_pk):
     if h_pk is not None and g_pk is not None:
-        try:
-            host = user_models.User.objects.get(pk=h_pk)
-            guest = user_models.User.objects.get(pk=g_pk)
-        except user_models.User.DoesNotExist:
-            return redirect(reverse("core:home"))
+        host = user_models.User.objects.get_or_none(pk=h_pk)
+        guest = user_models.User.objects.get_or_none(pk=g_pk)
         if host is not None and guest is not None:
             # q = Q(participants=guest)
             # q.add(Q(participants=host), q.AND)
