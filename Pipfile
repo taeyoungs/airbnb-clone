@@ -14,6 +14,8 @@ django-countries = "*"
 django-seed = "*"
 django-dotenv = "*"
 requests = "*"
+sentry-sdk = "*"
+pipenv-to-requirements = "*"
 
 [requires]
 python_version = "3.6"
