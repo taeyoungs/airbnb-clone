@@ -22,7 +22,7 @@ Reservation Detail
         </div>
         <div class="flex flex-col">
             <div class="font-semibold">Contact your Airbnb Host</div>
-            <a href="#" class="font-semibold text-teal-500">Send a Message</a>
+            <a href="{% url 'conversations:go' reservation.room_info.host.pk reservation.guest.pk %}" class="font-semibold text-teal-500">Send a Message</a>
         </div>
     </div>
     {% if reservation.status == 'pending' %}

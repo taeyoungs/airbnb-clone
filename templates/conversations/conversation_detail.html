@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title_name %}
+Conversation Detail
+{% endblock title_name %}
+
+{% block search_block %}
+{% endblock search_block %}
+
+{% block content %}
+
+<div class="container flex mx-auto">
+    <div class="w-1/4 border-gray-500 border flex flex-col items-center py-10">
+        <div class="font-semibold text-lg mb-10">Conversation Between:</div>
+        <div class="flex justify-around w-full items-center">
+            {% for participant in conversation.participants.all %}
+                <div>
+                    {% include "mixins/user_avatar.html" with user=participant %}
+                    <div class="text-center mt-3">{{participant.first_name}}</div>
+                </div>
+                {% if forloop.first %}
+                <span class="font-semibold text-lg">&</span>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    <div class="ml-3 w-3/4 border-gray-500 border flex flex-col">
+        {% if conversation.messages.count == 0 %}
+            <div class="text-gray-500 text-center mt-20">No messages</div>
+        {% endif %}
+        {% for message in conversation.messages.all %}
+        <div class="m-5 
+            {% if user == message.user %}
+            text-right
+            {% endif %}
+        ">
+            <div class="text-xs font-semibold mb-5">{{message.user.first_name}}</div>
+            <span class="px-10 py-4 border rounded-md text-sm
+                {% if user == message.user %}
+                bg-teal-500
+                text-white
+                {% else %}
+                bg-gray-300
+                {% endif %}
+            ">    
+                <span>{{message.msg}}</span>
+            </span>
+        </div>
+        {% endfor %}
+        <form method="POST" class="w-1/2 mx-auto mt-20">
+            {% csrf_token %}
+            <input class="mb-3 h-6 text-sm" type="text" placeholder="Write a message" name="message">
+            <button class="btn--small bg-red-500 text-white h-6 text-sm font-medium w-full">Send a message</button>
+        </form>
+    </div>
+</div>
+
+{% endblock content %}

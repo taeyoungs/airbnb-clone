@@ -6,6 +6,7 @@ from django.shortcuts import reverse
 from django.utils.html import strip_tags
 from django.template.loader import render_to_string
 from config import settings
+from core import managers as core_managers
 
 
 class User(AbstractUser):

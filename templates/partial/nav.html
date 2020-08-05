@@ -9,7 +9,7 @@
             {% else %}
             <li class="nav_link hover:border-red-500"><a href="{% url 'users:is-hosting' %}">Start hosting</a></li>
         {% endif %}
-        <li class="nav_link hover:border-red-500"><a href="#">Reservations</a></li>
+        <li class="nav_link hover:border-red-500"><a href="{% url 'users:reservations' %}">Reservations</a></li>
         <li class="nav_link hover:border-red-500"><a href="{% url 'lists:detail' %}">Favs ({{user.list.room.count}})</a></li>
         <li class="nav_link hover:border-red-500"><a href="{{user.get_absolute_url}}">Profile</a></li>
         <li class="nav_link hover:border-red-500"><a href="{% url "users:logout" %}">Log Out</a></li>

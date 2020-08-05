@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title_name %}
+{{user.first_name}}'s Reservations
+{% endblock title_name %}
+
+{% block search_block %}
+{% endblock search_block %}
+
+{% block content %}
+
+<div class="container mx-auto">
+    <div class="-mx-20">
+    {% include "mixins/user/user_reservation.html" with user=user is_hosting=request.session.is_hosting %}
+    </div>
+</div>
+
+{% endblock content %}

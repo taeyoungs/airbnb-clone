@@ -4,24 +4,32 @@
 <div class="text-center text-xl font-semibold my-10">Reservation list (Host)</div>
 {% endif %}
 <div class="flex flex-wrap mt-10 mx-32 mb-24">
+    <div class="my-2 grid grid-cols-4 w-full">
+        <span class="text-center text-lg font-medium">Duration</span>
+        <span class="text-center text-lg font-medium">Room</span>
+        <span class="text-center text-lg font-medium">Status</span>
+        <span class="text-center text-lg font-medium">Conversation</span>
+    </div>
     {% if user.reservations.count == 0 %}
         <div class="text-center text-gray-400 text-sm">No reservations</div>
     {% else %}
         {% if not is_hosting %}
             {% for r in user.reservations.all %}
-                <div class="my-2">
-                    <span class="font-medium">{{r.check_in}} - {{r.check_out}}</span>
-                    <a href="{% url 'reservations:detail' r.pk %}" class="ml-5">{{r.room_info.name}} </a>
-                    <span class="mx-5 font-semibold {% if r.status == 'pending' %}text-yellow-600{% endif %}{% if r.status == 'canceled' %}text-red-600{% endif %}{% if r.status == 'confirmed' %}text-teal-600{% endif %}">{{r.get_status_display}}</span>
+                <div class="my-2 grid grid-cols-4 w-full items-center">
+                    <span class="flex mr-5 font-medium text-sm">{{r.check_in}} ~ {{r.check_out}}</span>
+                    <a href="{% url 'reservations:detail' r.pk %}" class="flex justify-center">{{r.room_info.name}} </a>
+                    <span class="flex justify-center font-semibold {% if r.status == 'pending' %}text-yellow-600{% endif %}{% if r.status == 'canceled' %}text-red-600{% endif %}{% if r.status == 'confirmed' %}text-teal-600{% endif %}">{{r.get_status_display}}</span>
+                    <a href="{% url 'conversations:go' r.room_info.host.pk user.pk %}" class="flex justify-center p-2 bg-gray-300 rounded-md text-sm">Send a Message</a>
                 </div>
             {% endfor %}
         {% else %}
             {% for room in user.rooms.all %}
                 {% for r in room.reservations.all %}
-                    <div class="my-2">
-                        <span class="font-medium">{{r.check_in}} - {{r.check_out}}</span>
-                        <a href="{% url 'reservations:detail' r.pk %}" class="ml-5">{{r.room_info.name}} </a>
-                        <span class="mx-5 font-semibold {% if r.status == 'pending' %}text-yellow-600{% endif %}{% if r.status == 'canceled' %}text-red-600{% endif %}{% if r.status == 'confirmed' %}text-teal-600{% endif %}">{{r.get_status_display}}</span>
+                    <div class="my-2 grid grid-cols-4 w-full items-center">
+                        <span class="flex mr-5 font-medium text-sm">{{r.check_in}} ~ {{r.check_out}}</span>
+                        <a href="{% url 'reservations:detail' r.pk %}" class="flex justify-center">{{r.room_info.name}} </a>
+                        <span class="flex justify-center font-semibold {% if r.status == 'pending' %}text-yellow-600{% endif %}{% if r.status == 'canceled' %}text-red-600{% endif %}{% if r.status == 'confirmed' %}text-teal-600{% endif %}">{{r.get_status_display}}</span>
+                        <a href="{% url 'conversations:go' r.room_info.host.pk user.pk %}" class="flex justify-center p-2 bg-gray-300 rounded-md text-sm">Send a Message</a>
                     </div>
                 {% endfor %}
             {% endfor %}

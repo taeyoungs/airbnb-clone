@@ -1,7 +1,7 @@
 import os
 from django.utils import translation
 from django.http import HttpResponse
-from django.views.generic import FormView, DetailView, UpdateView
+from django.views.generic import FormView, DetailView, UpdateView, TemplateView
 from django.contrib.auth.views import PasswordChangeView
 from django.views import View
 from django.urls import reverse_lazy
@@ -326,3 +326,8 @@ def switch_lang(request):
         request.session[translation.LANGUAGE_SESSION_KEY] = lang
 
     return HttpResponse(status=200)
+
+
+class UserReservationListView(TemplateView):
+
+    template_name = "users/user_reservation_list.html"
