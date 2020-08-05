@@ -35,9 +35,6 @@
     const handleLangChange = () => {
         selectedLang = lang.value
         fetch(`{% url 'users:switch-lang' %}?lang=${selectedLang}`).then(() => {
-            {% get_current_language as LANGUAGE_CODE %}
-            const t = `{{LANGUAGE_CODE}}`
-            alert(t)
         }).then(() => window.location.reload())
     };
     lang.addEventListener("change", handleLangChange);
