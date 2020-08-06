@@ -5,6 +5,8 @@ from django.core.mail import send_mail
 from django.shortcuts import reverse
 from django.utils.html import strip_tags
 from django.template.loader import render_to_string
+from imagekit.models import ImageSpecField
+from imagekit.processors import ResizeToFill
 from config import settings
 from core import managers as core_managers
 
@@ -44,6 +46,12 @@ class User(AbstractUser):
     )
 
     avatar = models.ImageField(blank=True, upload_to="avatar")
+    avatar_thumbnail = ImageSpecField(
+        source="avatar",
+        processors=[ResizeToFill(200, 200)],
+        format="JPEG",
+        options={"quality": 60},
+    )
     gender = models.CharField(max_length=10, blank=True, choices=GENDER_CHOICES)
     bio = models.TextField(blank=True)
     birthdate = models.DateField(null=True, blank=True)

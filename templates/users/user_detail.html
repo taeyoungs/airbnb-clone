@@ -27,12 +27,17 @@
         
     </div>
 
-    <div class="text-center text-xl font-semibold my-10">{{user_obj.first_name}}'s Rooms</div>
+    {% if user_obj.rooms.count == 0 %}
+        <div class="text-center text-xl font-semibold my-10">No Rooms</div>
+    {% else %}
+        <div class="text-center text-xl font-semibold my-10">{{user_obj.first_name}}'s Rooms</div>
 
-    <div class="flex flex-wrap my-10 mx-32">
-    {% for room in user_obj.rooms.all %}
-        {% include "mixins/room_card.html" with room=room %}
-    {% endfor %}
+        <div class="flex flex-wrap my-10 mx-32">
+        {% for room in user_obj.rooms.all %}
+            {% include "mixins/room_card.html" with room=room %}
+        {% endfor %}
+    {% endif %}
+   
     </div>
 </div>
 

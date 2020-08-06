@@ -18,6 +18,7 @@ sentry-sdk = "*"
 pipenv-to-requirements = "*"
 django-storages = "*"
 boto3 = "*"
+django-imagekit = "*"
 
 [requires]
 python_version = "3.6"

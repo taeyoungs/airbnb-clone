@@ -32,6 +32,7 @@ if DEBUG:
 else:
     ALLOWED_HOSTS = [
         ".elasticbeanstalk.com",
+        "172.31.11.6",
     ]
 
 
@@ -56,7 +57,7 @@ PROJECT_APPS = [
     "reservations.apps.ReservationsConfig",
 ]
 
-THIRD_PARTY_APPS = ["django_countries", "django_seed", "storages"]
+THIRD_PARTY_APPS = ["django_countries", "django_seed", "storages", "imagekit"]
 
 INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + THIRD_PARTY_APPS
 
