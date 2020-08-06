@@ -12,11 +12,11 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
 
-        admin = User.objects.get_or_none(username="ebadmin")
-        if admin is None:
+        try:
+            User.objects.get(username="ebadmin")
+            self.stdout.write(self.style.SUCCESS(f"Super user already exists"))
+        except User.DoesNotExist:
             User.objects.create_superuser(
                 "ebadmin", os.environ.get("SU_EMAIL"), os.environ.get("SU_PASSWORD")
             )
             self.stdout.write(self.style.SUCCESS(f"Super user created"))
-        else:
-            self.stdout.write(self.style.SUCCESS(f"Super user already exists"))

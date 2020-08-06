@@ -16,6 +16,8 @@ django-dotenv = "*"
 requests = "*"
 sentry-sdk = "*"
 pipenv-to-requirements = "*"
+django-storages = "*"
+boto3 = "*"
 
 [requires]
 python_version = "3.6"
