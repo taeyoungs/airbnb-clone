@@ -18,5 +18,8 @@
     "gulp-sass": "^4.1.0",
     "node-sass": "^4.14.1",
     "tailwindcss": "^1.4.6"
+  },
+  "dependencies": {
+    "lodash": "^4.17.19"
   }
 }
