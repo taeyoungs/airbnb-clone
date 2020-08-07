@@ -11,7 +11,7 @@
         <span class="text-center text-lg font-medium">Conversation</span>
     </div>
     {% if user.reservations.count == 0 %}
-        <div class="text-center text-gray-400 text-sm">No reservations</div>
+        <div class="text-center text-gray-500 mt-5 w-full">No reservations</div>
     {% else %}
         {% if not is_hosting %}
             {% for r in user.reservations.all %}
